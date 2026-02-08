@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: bot-planilla-backend
+    env: java
+    buildCommand: cd backend && mvn clean package -DskipTests
+    startCommand: cd backend && java -jar target/bot-planilla-backend-1.0.0.jar --spring.profiles.active=prod
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      # IMPORTANTE: Las siguientes variables DEBEN configurarse manualmente en Render Dashboard
+      # NO incluir valores aquí por seguridad. Ver RENDER_SETUP.md para instrucciones detalladas.
+      - key: SPRING_DATASOURCE_URL
+        sync: false
+      - key: SPRING_DATASOURCE_USERNAME
+        sync: false
+      - key: SPRING_DATASOURCE_PASSWORD
+        sync: false
+
