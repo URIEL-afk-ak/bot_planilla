@@ -35,11 +35,12 @@ En la sección **"Environment"** del servicio, agrega las siguientes variables:
    - Valor: `prod`
 
 2. **SPRING_DATASOURCE_URL**
-   - Valor: `jdbc:postgresql://db.amjsltygrftkcjoekczc.supabase.co:6543/postgres?sslmode=require`
+   - Valor: `jdbc:postgresql://aws-1-us-east-1.pooler.supabase.com:6543/postgres?sslmode=require`
    - ⚠️ **IMPORTANTE**: Usa el puerto `6543` (Session Pooler) para compatibilidad IPv4
+   - Modo Pool: Transacción
 
 3. **SPRING_DATASOURCE_USERNAME**
-   - Valor: `postgres`
+   - Valor: `postgres.amjsltygrftkcjoekczc`
 
 4. **SPRING_DATASOURCE_PASSWORD**
    - Valor: `1913FacultadesUriel`

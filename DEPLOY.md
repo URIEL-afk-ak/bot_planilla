@@ -21,8 +21,8 @@ Para una guía detallada, consulta: **[RENDER_SETUP.md](./RENDER_SETUP.md)**
 2. **Configurar Variables de Entorno en Render Dashboard:**
    ```
    SPRING_PROFILES_ACTIVE=prod
-   SPRING_DATASOURCE_URL=jdbc:postgresql://db.amjsltygrftkcjoekczc.supabase.co:6543/postgres?sslmode=require
-   SPRING_DATASOURCE_USERNAME=postgres
+   SPRING_DATASOURCE_URL=jdbc:postgresql://aws-1-us-east-1.pooler.supabase.com:6543/postgres?sslmode=require
+   SPRING_DATASOURCE_USERNAME=postgres.amjsltygrftkcjoekczc
    SPRING_DATASOURCE_PASSWORD=1913FacultadesUriel
    ```
 
