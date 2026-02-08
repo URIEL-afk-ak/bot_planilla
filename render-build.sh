@@ -53,6 +53,59 @@ fi
 
 export PATH="$MAVEN_DIR/bin:$PATH"
 
+# Configurar JAVA_HOME si no está definido
+if [ -z "$JAVA_HOME" ]; then
+  echo "=== Buscando Java ==="
+  # Intentar encontrar Java en ubicaciones comunes
+  if [ -d "/usr/lib/jvm/java-17-openjdk-amd64" ]; then
+    export JAVA_HOME="/usr/lib/jvm/java-17-openjdk-amd64"
+  elif [ -d "/usr/lib/jvm/java-17-openjdk" ]; then
+    export JAVA_HOME="/usr/lib/jvm/java-17-openjdk"
+  elif [ -d "/usr/lib/jvm/java-11-openjdk-amd64" ]; then
+    export JAVA_HOME="/usr/lib/jvm/java-11-openjdk-amd64"
+  elif [ -d "/usr/lib/jvm/java-11-openjdk" ]; then
+    export JAVA_HOME="/usr/lib/jvm/java-11-openjdk"
+  else
+    # Buscar Java usando which
+    JAVA_PATH=$(which java 2>/dev/null || echo "")
+    if [ -n "$JAVA_PATH" ]; then
+      JAVA_HOME=$(readlink -f "$JAVA_PATH" | sed "s:bin/java::")
+      export JAVA_HOME
+    fi
+  fi
+fi
+
+if [ -z "$JAVA_HOME" ]; then
+  echo "=== Java no encontrado, descargando JDK portable ==="
+  cd /tmp
+  
+  # Descargar OpenJDK 17 portable (no requiere instalación)
+  JDK_VER=17.0.10
+  JDK_DIR=/tmp/jdk-$JDK_VER
+  
+  if [ ! -d "$JDK_DIR" ]; then
+    echo "Descargando OpenJDK 17..."
+    curl -L "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-${JDK_VER}%2B9/OpenJDK17U-jdk_x64_linux_hotspot_${JDK_VER}_9.tar.gz" -o jdk.tar.gz || \
+    curl -L "https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz" -o jdk.tar.gz
+    
+    if [ -f jdk.tar.gz ] && [ $(stat -c%s jdk.tar.gz 2>/dev/null || echo 0) -gt 1000 ]; then
+      tar -xzf jdk.tar.gz
+      mv jdk-* $JDK_DIR 2>/dev/null || mv java-* $JDK_DIR 2>/dev/null || true
+      rm -f jdk.tar.gz
+    fi
+  fi
+  
+  if [ -d "$JDK_DIR" ]; then
+    export JAVA_HOME="$JDK_DIR"
+    export PATH="$JAVA_HOME/bin:$PATH"
+    echo "JDK descargado en: $JAVA_HOME"
+  else
+    echo "Error: No se pudo descargar Java"
+    exit 1
+  fi
+fi
+
+echo "=== JAVA_HOME: $JAVA_HOME ==="
 echo "=== Verificando Maven ==="
 mvn --version
 
