@@ -94,6 +94,25 @@ echo "=== JAVA_HOME: $JAVA_HOME ==="
 echo "=== Verificando Java ==="
 java -version
 
+# Ir al directorio del proyecto donde está el JAR
+PROJECT_DIR="/opt/render/project/src"
+if [ ! -d "$PROJECT_DIR" ]; then
+  PROJECT_DIR="."
+fi
+
+cd "$PROJECT_DIR"
+echo "=== Directorio del proyecto: $(pwd) ==="
+echo "=== Buscando JAR ==="
+ls -la target/ 2>/dev/null || echo "Directorio target no encontrado"
+ls -la *.jar 2>/dev/null || echo "No hay JARs en el directorio actual"
+
 echo "=== Ejecutando aplicación ==="
-java -jar target/bot-planilla-backend-1.0.0.jar --spring.profiles.active=prod
+if [ -f "target/bot-planilla-backend-1.0.0.jar" ]; then
+  java -jar target/bot-planilla-backend-1.0.0.jar --spring.profiles.active=prod
+else
+  echo "Error: JAR no encontrado en target/bot-planilla-backend-1.0.0.jar"
+  echo "Buscando JAR en otros lugares..."
+  find . -name "*.jar" -type f 2>/dev/null | head -5
+  exit 1
+fi
 
