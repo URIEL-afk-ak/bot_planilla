@@ -1,6 +1,5 @@
 package com.botplanilla.dto;
 
-import com.botplanilla.model.TipoProducto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,7 +13,7 @@ import java.util.List;
 public class PlanillaDTO {
     private Long productoId;
     private String nombreProducto;
-    private TipoProducto tipoProducto;
+    private String tipoProducto;
     private BigDecimal precioBase;
     private BigDecimal precioVenta;
     private Integer cantidadBulto;

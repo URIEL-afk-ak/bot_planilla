@@ -1,7 +1,6 @@
 package com.botplanilla.service;
 
 import com.botplanilla.model.Producto;
-import com.botplanilla.model.TipoProducto;
 import com.botplanilla.repository.ProductoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,6 +13,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ProductoService {
     private final ProductoRepository productoRepository;
+    private final TipoProductoService tipoProductoService;
 
     public List<Producto> obtenerTodos() {
         return productoRepository.findAll();
@@ -31,11 +31,11 @@ public class ProductoService {
         return productoRepository.findByNombreContainingIgnoreCase(nombre);
     }
 
-    public List<Producto> buscarPorTipo(TipoProducto tipo) {
+    public List<Producto> buscarPorTipo(String tipo) {
         return productoRepository.findByTipo(tipo);
     }
 
-    public List<Producto> buscarPorTipoYNombre(TipoProducto tipo, String nombre) {
+    public List<Producto> buscarPorTipoYNombre(String tipo, String nombre) {
         return productoRepository.findByTipoAndNombreContainingIgnoreCase(tipo, nombre);
     }
 
@@ -45,6 +45,13 @@ public class ProductoService {
         if (productoRepository.findByNombre(producto.getNombre()).isPresent()) {
             throw new RuntimeException("Ya existe un producto con el nombre: " + producto.getNombre());
         }
+        
+        // Normalizar y asegurar que el tipo existe, si no, crearlo
+        if (producto.getTipo() != null && !producto.getTipo().trim().isEmpty()) {
+            String tipoNormalizado = tipoProductoService.normalizarYObtenerNombre(producto.getTipo());
+            producto.setTipo(tipoNormalizado);
+        }
+        
         return productoRepository.save(producto);
     }
 
@@ -61,8 +68,10 @@ public class ProductoService {
         }
 
         producto.setNombre(productoActualizado.getNombre());
-        if (productoActualizado.getTipo() != null) {
-            producto.setTipo(productoActualizado.getTipo());
+        if (productoActualizado.getTipo() != null && !productoActualizado.getTipo().trim().isEmpty()) {
+            // Normalizar y asegurar que el tipo existe, si no, crearlo
+            String tipoNormalizado = tipoProductoService.normalizarYObtenerNombre(productoActualizado.getTipo());
+            producto.setTipo(tipoNormalizado);
         }
         producto.setPrecioBase(productoActualizado.getPrecioBase());
         producto.setPrecioVenta(productoActualizado.getPrecioVenta());

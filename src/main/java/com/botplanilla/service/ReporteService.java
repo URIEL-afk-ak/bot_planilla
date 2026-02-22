@@ -2,7 +2,6 @@ package com.botplanilla.service;
 
 import com.botplanilla.dto.GananciaMensualDTO;
 import com.botplanilla.dto.TipoVendidoDTO;
-import com.botplanilla.model.TipoProducto;
 import com.botplanilla.model.Venta;
 import com.botplanilla.repository.VentaRepository;
 import lombok.RequiredArgsConstructor;
@@ -33,10 +32,8 @@ public class ReporteService {
         Map<String, TipoVendidoDTO> tipoMap = new HashMap<>();
 
         for (Venta venta : ventas) {
-            TipoProducto tipo = venta.getProducto().getTipo();
-            if (tipo == null) continue;
-
-            String tipoNombre = tipo.getNombre();
+            String tipoNombre = venta.getProducto().getTipo();
+            if (tipoNombre == null || tipoNombre.trim().isEmpty()) continue;
             TipoVendidoDTO dto = tipoMap.getOrDefault(tipoNombre, 
                     new TipoVendidoDTO(tipoNombre, BigDecimal.ZERO, BigDecimal.ZERO, 0));
 

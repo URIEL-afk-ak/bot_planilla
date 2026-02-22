@@ -1,6 +1,5 @@
 package com.botplanilla.model;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,10 +21,8 @@ public class Producto {
     @Column(nullable = false, unique = true)
     private String nombre;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "tipo")
-    @JsonDeserialize(using = TipoProductoDeserializer.class)
-    private TipoProducto tipo;
+    @Column(name = "tipo", nullable = false)
+    private String tipo;
 
     @Column(name = "precio_base", nullable = false, precision = 10, scale = 2)
     private BigDecimal precioBase;

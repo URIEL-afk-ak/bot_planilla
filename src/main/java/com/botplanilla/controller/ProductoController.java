@@ -1,7 +1,6 @@
 package com.botplanilla.controller;
 
 import com.botplanilla.model.Producto;
-import com.botplanilla.model.TipoProducto;
 import com.botplanilla.service.ProductoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -35,17 +34,17 @@ public class ProductoController {
     }
 
     @GetMapping("/tipo/{tipo}")
-    public ResponseEntity<List<Producto>> buscarPorTipo(@PathVariable TipoProducto tipo) {
+    public ResponseEntity<List<Producto>> buscarPorTipo(@PathVariable String tipo) {
         return ResponseEntity.ok(productoService.buscarPorTipo(tipo));
     }
 
     @GetMapping("/buscar-filtrado")
     public ResponseEntity<List<Producto>> buscarFiltrado(
-            @RequestParam(required = false) TipoProducto tipo,
+            @RequestParam(required = false) String tipo,
             @RequestParam(required = false) String nombre) {
-        if (tipo != null && nombre != null && !nombre.trim().isEmpty()) {
+        if (tipo != null && !tipo.trim().isEmpty() && nombre != null && !nombre.trim().isEmpty()) {
             return ResponseEntity.ok(productoService.buscarPorTipoYNombre(tipo, nombre));
-        } else if (tipo != null) {
+        } else if (tipo != null && !tipo.trim().isEmpty()) {
             return ResponseEntity.ok(productoService.buscarPorTipo(tipo));
         } else if (nombre != null && !nombre.trim().isEmpty()) {
             return ResponseEntity.ok(productoService.buscarPorNombre(nombre));

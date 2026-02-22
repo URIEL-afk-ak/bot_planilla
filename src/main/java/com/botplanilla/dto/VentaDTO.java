@@ -1,6 +1,5 @@
 package com.botplanilla.dto;
 
-import com.botplanilla.model.TipoProducto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +14,7 @@ public class VentaDTO {
     private Long id;
     private Long productoId;
     private String nombreProducto;
-    private TipoProducto tipoProducto;
+    private String tipoProducto;
     private BigDecimal cantidadVendida;
     private BigDecimal precioUnitarioVenta;
     private BigDecimal totalVenta;
