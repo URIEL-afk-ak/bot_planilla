@@ -14,3 +14,5 @@ public interface TipoProductoRepository extends JpaRepository<TipoProductoEntity
     List<TipoProductoEntity> findAllByOrderByNombreAsc();
 }
 
+
+

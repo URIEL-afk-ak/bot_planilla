@@ -22,6 +22,13 @@ public class TipoProductoController {
         return ResponseEntity.ok(tipoProductoService.obtenerTodos());
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<TipoProductoEntity> obtenerPorId(@PathVariable Long id) {
+        return tipoProductoService.obtenerPorId(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @PostMapping
     public ResponseEntity<?> crear(@RequestBody Map<String, String> request) {
         try {
@@ -40,5 +47,39 @@ public class TipoProductoController {
                     .body("Error al crear tipo: " + e.getMessage());
         }
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> actualizar(@PathVariable Long id, @RequestBody Map<String, String> request) {
+        try {
+            String nombre = request.get("nombre");
+            if (nombre == null || nombre.trim().isEmpty()) {
+                return ResponseEntity.badRequest()
+                        .body("Error: El nombre del tipo es requerido");
+            }
+            TipoProductoEntity tipo = tipoProductoService.actualizar(id, nombre);
+            return ResponseEntity.ok(tipo);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest()
+                    .body("Error: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .body("Error al actualizar tipo: " + e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> eliminar(@PathVariable Long id) {
+        try {
+            tipoProductoService.eliminar(id);
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest()
+                    .body("Error: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .body("Error al eliminar tipo: " + e.getMessage());
+        }
+    }
 }
+
 
